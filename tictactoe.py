@@ -60,10 +60,13 @@ def computer_move():
 	print("Computer is thinking...")
 	time.sleep(2)
 
-	# If center space is available, make the move.
-	if board[4] == " ":
-		choice = 4
-	else:
+	# Easy difficulty.
+	if difficulty == 1:
+		# Pick a random choice from the available spaces.
+		choice = random.choice(available)
+
+	# Medium difficulty.
+	if difficulty == 2:
 		# Is it possible to win with a single move?
 		choice = power_move("O")
 		if choice == None:
@@ -73,7 +76,22 @@ def computer_move():
 				# Pick a random choice from the available spaces.
 				choice = random.choice(available)
 
-	# Make the move.
+	# Hard difficulty.
+	if difficulty == 3:
+		# If center space is available, make the move.
+		if board[4] == " ":
+			choice = 4
+		else:
+			# Is it possible to win with a single move?
+			choice = power_move("O")
+			if choice == None:
+				# Is it needed to defend from the opponent's winning move?
+				choice = power_move("X")
+				if choice == None:
+					# Pick a random choice from the available spaces.
+					choice = random.choice(available)
+
+	# Make the actual move.
 	board[choice] = "O"
 
 	# Update available spaces.
@@ -182,17 +200,36 @@ game_title = "Welcome to Tic-Tac-Toe"
 print()
 print("*" * len(game_title))
 print(game_title)
-print("Version: 24.08.01.".center(len(game_title)))
+print("Version: 24.08.02.".center(len(game_title)))
 print("*" * len(game_title))
 print()
+
 
 # Ask for player's name.
 name = input("Enter your name: ").strip()
 
+
+# Difficulty settings.
+print()
+print("Select difficulty:")
+print("1: Beginner")
+print("2: Normal")
+print("3: Impossible!")
+print()
+
+
+# Select difficulty.
+difficulty = int(input("Enter a number for difficulty level [1/2/3]: ").strip())
+
+# Check for a valid difficulty input.
+while difficulty not in [1, 2, 3]:
+	print("Invalid input.")
+	difficulty = int(input("Enter a number for difficulty level [1/2/3]: ").strip())
+
+
+# Display help.
 print("\nYou can move by entering any of the following numbers:")
 time.sleep(2)
-
-# Display move instructions.
 print_help_board()
 
 
@@ -242,8 +279,9 @@ while True:
 			break
 
 
-	# Reset starter for next round.
+	# Reset starting player for next round.
 	starter = None
+
 
 # Add an empty line when user quits the game.
 print()
