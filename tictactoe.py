@@ -5,10 +5,8 @@ import random
 """ Initialize game data. """
 # Game board.
 board = [" " for i in range(9)]
-
 # Available spaces on board.
 available = [i for i in range(9)]
-
 # Who starts the game?
 starter = random.choice(["player", "computer"])
 
@@ -42,8 +40,26 @@ def print_help_board():
 # Logic for player movement.
 def player_move():
 	print("It's your move {}.".format(name))
-	choice = int(input("Enter your move (1-9): ").strip())
 
+	# Ask for user input and validate it.
+	while True:
+		try:
+			# Make sure it's a number.
+			choice = int(input("Enter your move (1-9): ").strip())
+
+			# Make sure it's between 1 and 9.
+			if choice in range(1, 10):
+				break
+			else:
+				print()
+				print("INVALID MOVE!")
+				print()
+		except ValueError:
+			print()
+			print("INVALID MOVE!")
+			print()
+
+	# If input passed validation and space is empty, make the move.
 	if board[choice - 1] == " ":
 		board[choice - 1] = "X"
 
@@ -51,7 +67,8 @@ def player_move():
 		available.remove(choice - 1)
 	else:
 		print()
-		print("THAT SPACE IS TAKEN!\n")
+		print("THAT SPACE IS TAKEN!")
+		print()
 		player_move()
 
 
@@ -200,16 +217,25 @@ game_title = "Welcome to Tic-Tac-Toe"
 print()
 print("*" * len(game_title))
 print(game_title)
-print("Version: 24.08.02.".center(len(game_title)))
+print("Version: 24.08.08.".center(len(game_title)))
 print("*" * len(game_title))
 print()
 
 
-# Ask for player's name.
-name = input("Enter your name: ").strip()
+# Ask for player's name and validate input.
+while True:
+	name = input("Enter your name: ").strip()
+
+	# Make sure it's not empty.
+	if name == "":
+		print()
+		print("NAME CANNOT BE EMPTY!")
+		print()
+	else:
+		break
 
 
-# Difficulty settings.
+# Difficulty options.
 print()
 print("Select difficulty:")
 print("1: Beginner")
@@ -217,18 +243,28 @@ print("2: Normal")
 print("3: Impossible!")
 print()
 
-
-# Select difficulty.
-difficulty = int(input("Enter a number for difficulty level [1/2/3]: ").strip())
-
 # Check for a valid difficulty input.
-while difficulty not in [1, 2, 3]:
-	print("Invalid input.")
-	difficulty = int(input("Enter a number for difficulty level [1/2/3]: ").strip())
+while True:
+	try:
+		#  Make sure it's a number.
+		difficulty = int(input("Enter a number for difficulty level [1/2/3]: ").strip())
+
+		# Make sure it's between 1 and 3.
+		if difficulty in range(1, 4):
+			break
+		else:
+			print()
+			print("INVALID DIFFICULTY LEVEL!")
+			print()
+	except ValueError:
+		print()
+		print("INVALID DIFFICULTY LEVEL!")
+		print()
 
 
 # Display help.
-print("\nYou can move by entering any of the following numbers:")
+print()
+print("You can move by entering any of the following numbers:")
 time.sleep(2)
 print_help_board()
 
